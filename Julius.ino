@@ -15,10 +15,17 @@ void setup() {
     setupUltrasonic();
     setupDrive();
 
-    //runFullMission();
     //fullSystemTest();
     //drive(255);
-    moveToPoint(Enes100.missionSite.x, Enes100.missionSite.y, Forklift);
+    // moveToPoint(Enes100.missionSite.x, Enes100.missionSite.y, Forklift);
+    //moveToPoint(2.5, 1.5, Forklift);
+    Enes100.print("X: ");
+    Enes100.print(Enes100.missionSite.x);
+    Enes100.print("    Y: ");
+    Enes100.println(Enes100.missionSite.y);
+    //runFullMission();
+    turnToAngle(0);
+
 }
 
 void loop() {}
@@ -46,16 +53,16 @@ void runFullMission() {
     // Step 1: Put the forklift down
     forkliftDown();
     while (digitalRead(limitDown))
-        delay(50);
+        delay(1);
     forkliftStop();
 
     // Step 2: Move back until a connection is made
     int dutyCycle;
-    while (!readDataConnection(dutyCycle)) {
-        drive(-100);
-        delay(100);
-        stop();
-    }
+    // while (!readDataConnection(dutyCycle)) {
+    //     drive(-100);
+    //     delay(100);
+    //     stop();
+    // }
 
     // Step 3: Print results
     Enes100.print("Duty cycle is ");

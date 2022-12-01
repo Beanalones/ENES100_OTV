@@ -1,3 +1,6 @@
+#include "Arduino.h"
+#include "Test.h"
+
 void testOffsets() {
     Enes100.updateLocation();
     double x, y;
@@ -94,7 +97,8 @@ void fullSystemTest() {
 
     Enes100.println("Testing duty cycle probe...");
     delay(750);
-    for (int i = 1; i < 100; i++) {
+    long int start = millis();
+    while (millis() - start < 7000) {
         testForkliftProbe();
         delay(50);
     }
@@ -141,7 +145,6 @@ void testForkliftProbe(){
   if(readDataConnection(dutyCycle)){
     Enes100.print("Duty cycle: ");
     Enes100.println(dutyCycle);
-    Enes100.println();
     
     if(isMagnetic()){
       Enes100.println("Puck is magnetic");
@@ -168,7 +171,7 @@ void testGetLocation(){
 void testClimbLog(){
     while(Enes100.location.x < 4.7){
       Enes100.updateLocation();
-      advance(255, 255);
+      drive(255);
     }
     stop();
 }

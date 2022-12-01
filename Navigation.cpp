@@ -40,8 +40,12 @@ void turnToAngle(double theta) {
     while (1) {
         Enes100.updateLocation();
         double dTheta = getDeltaAngle(Enes100.location.theta, theta);
-        if ((isnan(lastAngle) || (lastAngle * dTheta > 0))) {
+        Enes100.print(lastAngle);
+        Enes100.print("   ");
+        Enes100.println(dTheta);
+        if ((isnan(lastAngle) || (lastAngle * dTheta >= 0))) {
             turn(turnSpeedForDeltaTheta(dTheta));
+            
             lastAngle = dTheta;
         }
         else

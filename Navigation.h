@@ -11,7 +11,7 @@ enum CenterPoint {
 
 // The offset from the aruco to the center of the arm
 #define forkliftXOff 0.075
-#define forkliftYOff 0.265
+#define forkliftYOff 0.28
 
 // The offset from the aruco to the center of the robot
 // The robot center is the point the wheels rotate around
