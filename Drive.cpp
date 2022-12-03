@@ -43,23 +43,23 @@ void stop(void)                    //Stop
   digitalWrite(In2Right,LOW);
 }
 
-void leftForward(char speed){
+void leftBackward(char speed){
   analogWrite(EnLeft, speed);
   digitalWrite(In1Left,HIGH);
   digitalWrite(In2Left,LOW);
 }
-void leftBackward(char speed){
+void leftForward(char speed){
   analogWrite(EnLeft, speed);
   digitalWrite(In1Left,LOW);
   digitalWrite(In2Left,HIGH);
 }
 
-void rightForward(char speed){
+void rightBackward(char speed){
   analogWrite(EnRight, speed);
   digitalWrite(In1Right,HIGH);
   digitalWrite(In2Right,LOW);
 }
-void rightBackward(char speed){
+void rightForward(char speed){
   analogWrite(EnRight, speed);
   digitalWrite(In1Right,LOW);
   digitalWrite(In2Right,HIGH);

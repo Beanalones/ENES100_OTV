@@ -6,8 +6,8 @@ enum CenterPoint {
     Aruco, Forklift, Center
 };
 
-#define minWheelSpeed 140
-#define maxWheelSpeed 175
+#define minWheelSpeed 200
+#define maxWheelSpeed 255
 
 // The offset from the aruco to the center of the arm
 #define forkliftXOff 0.075

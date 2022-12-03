@@ -16,15 +16,20 @@ void setup() {
     setupDrive();
 
     //fullSystemTest();
-    //drive(255);
-    // moveToPoint(Enes100.missionSite.x, Enes100.missionSite.y, Forklift);
+    //moveToPoint(Enes100.missionSite.x, Enes100.missionSite.y, Forklift);
     //moveToPoint(2.5, 1.5, Forklift);
     Enes100.print("X: ");
     Enes100.print(Enes100.missionSite.x);
     Enes100.print("    Y: ");
     Enes100.println(Enes100.missionSite.y);
-    //runFullMission();
-    turnToAngle(0);
+    runFullMission();
+    // moveToPoint(0.55,0.55, Center);
+    // Enes100.updateLocation();
+    // Enes100.print("X: ");
+    // Enes100.print(Enes100.location.x);
+    // Enes100.print("    Y: ");
+    // Enes100.println(Enes100.location.y);
+    //turnToAngle(0);
 
 }
 
@@ -52,17 +57,17 @@ void runFullMission() {
     //
     // Step 1: Put the forklift down
     forkliftDown();
-    while (digitalRead(limitDown))
+    long int start = millis();
+    while (digitalRead(limitDown) && (millis() - start < 250))
         delay(1);
     forkliftStop();
 
+    drive(-100);
+    delay(100);
+    stop();
     // Step 2: Move back until a connection is made
     int dutyCycle;
-    // while (!readDataConnection(dutyCycle)) {
-    //     drive(-100);
-    //     delay(100);
-    //     stop();
-    // }
+    readDataConnection(dutyCycle);
 
     // Step 3: Print results
     Enes100.print("Duty cycle is ");
@@ -82,7 +87,7 @@ void runFullMission() {
         delay(10);
     forkliftStop();
     drive(-100);
-    delay(500);
+    delay(1000);
     stop();
     // Done with data section!
 

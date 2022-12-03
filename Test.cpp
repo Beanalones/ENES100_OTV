@@ -80,13 +80,13 @@ void fullSystemTest() {
     delay(1000);
     stop();
 
-    Enes100.println("Testing forklift movement...");
-    delay(750);
-    forkliftDown();
-    for (int i = 1; i < 2000; i++) {
-        testForkliftMovement();
-    }
-    forkliftStop();
+    // Enes100.println("Testing forklift movement...");
+    // delay(750);
+    // forkliftDown();
+    // for (int i = 1; i < 2000; i++) {
+    //     testForkliftMovement();
+    // }
+    // forkliftStop();
 
     Enes100.println("Testing ultrasonic sensor...");
     delay(750);

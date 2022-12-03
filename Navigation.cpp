@@ -6,9 +6,10 @@
 void moveToPoint(double xTarget, double yTarget, CenterPoint center) {
     double distance = 100;
     double lastAngle = NAN;
-    while (distance >= 0.07) {
+    long int lastTurnTime = 0;
+    while (distance >= 0.02) {
         Enes100.updateLocation();
-
+        
         double x, y;
         if (center = Forklift) {
             getForkliftPos(Enes100.location.x, Enes100.location.y, Enes100.location.theta, x, y);
@@ -22,15 +23,33 @@ void moveToPoint(double xTarget, double yTarget, CenterPoint center) {
         }
         double ang = angleToPoint(x, y, xTarget, yTarget);
         double dTheta = getDeltaAngle(Enes100.location.theta, ang);
-        if ((!isnan(lastAngle) && (lastAngle * dTheta > 0)) || (abs(dTheta) > 0.3)) {
+
+        if ((!isnan(lastAngle) && (lastAngle * dTheta > 0)) || (abs(dTheta) > 0.3) && (distance > 0.4) && (millis() - lastTurnTime > 2500) ) {
             turn(turnSpeedForDeltaTheta(dTheta));
             lastAngle = dTheta;
+            lastTurnTime = millis();
         }
         else {
-            distance = sqrt(pow(xTarget - x, 2) + pow(yTarget - y, 2));
-            drive(driveSpeedForDistance(distance));
+            distance = sqrt(pow(xTarget - x, 2.) + pow(yTarget - y, 2.));
+            if(dTheta > (M_PI / 2.))
+              break;
+            else
+              drive(driveSpeedForDistance(distance));
+            
             lastAngle = NAN;
         }
+    Enes100.print("X: ");
+    Enes100.print(Enes100.location.x);
+    Enes100.print("    Y: ");
+    Enes100.print(Enes100.location.y);
+    Enes100.print("    Theta: ");
+    Enes100.print(Enes100.location.theta);
+    Enes100.print("    Angle: ");
+    Enes100.print(ang);
+        Enes100.print("     Distance: ");
+        Enes100.print(distance);
+        Enes100.print("    dtheta: ");
+        Enes100.println(dTheta);
     }
     stop();
 }
@@ -98,6 +117,7 @@ double turnSpeedForDeltaTheta(double dTheta){
   //int value = (int) map_value(dTheta, -M_PI, M_PI, -127, 127 );
   //int value = ((double)maxWheelSpeed - (double)minWheelSpeed) / sqrt(M_PI) * sqrt(abs(dTheta)) + (double)minWheelSpeed;
   int value = map_value(abs(dTheta), 0., M_PI, minWheelSpeed, maxWheelSpeed);
+  value=200;
   value = copysign(value, dTheta);
 
   return value;
@@ -106,6 +126,7 @@ double turnSpeedForDeltaTheta(double dTheta){
 double driveSpeedForDistance(double distance){
   //int value = ((double)maxWheelSpeed - (double)minWheelSpeed) / sqrt(2.) * sqrt(abs(distance)) + (double)minWheelSpeed;
   int value = map_value(abs(distance), 0., 2., minWheelSpeed, maxWheelSpeed);
+  value=100;
   value = copysign(value, distance);
   return value;
 }
