@@ -18,19 +18,12 @@ void setup() {
     //fullSystemTest();
     //moveToPoint(Enes100.missionSite.x, Enes100.missionSite.y, Forklift);
     //moveToPoint(2.5, 1.5, Forklift);
+    //turnToAngle(0);
     Enes100.print("X: ");
     Enes100.print(Enes100.missionSite.x);
     Enes100.print("    Y: ");
     Enes100.println(Enes100.missionSite.y);
     runFullMission();
-    // moveToPoint(0.55,0.55, Center);
-    // Enes100.updateLocation();
-    // Enes100.print("X: ");
-    // Enes100.print(Enes100.location.x);
-    // Enes100.print("    Y: ");
-    // Enes100.println(Enes100.location.y);
-    //turnToAngle(0);
-
 }
 
 void loop() {}
@@ -62,15 +55,27 @@ void runFullMission() {
         delay(1);
     forkliftStop();
 
-    drive(-100);
+    drive(-255);
     delay(100);
     stop();
     // Step 2: Move back until a connection is made
-    int dutyCycle;
-    readDataConnection(dutyCycle);
+    int dutyCycle = 0;
+    for(int i=0;i<7;i++){
+      Enes100.print("Attempt ");
+      Enes100.print(i + 1);
+      Enes100.print("/10");
+      if(readDataConnection(dutyCycle)){
+        Enes100.println("   Connection is good");
+        break;
+      }
+      else{
+        Enes100.println("  Poor connection");
+      }
+    }
 
     // Step 3: Print results
     Enes100.print("Duty cycle is ");
+    Enes100.println(dutyCycle);
     Enes100.mission(CYCLE, dutyCycle);
     if (isMagnetic()) {
         Serial.println("Puck is magnetic");
@@ -86,7 +91,7 @@ void runFullMission() {
     while (digitalRead(limitUp))
         delay(10);
     forkliftStop();
-    drive(-100);
+    drive(-150);
     delay(1000);
     stop();
     // Done with data section!
@@ -155,15 +160,14 @@ void runFullMission() {
 
     // Move in front of the log
     moveToPoint(2.8, 0.5, Center);
-    turnToAngle(0);
+    turnToAngle(M_PI);
 
     // Clib the Log
-    while (Enes100.location.x < 4.7) {
+    while (Enes100.location.x < 3.7) {
         Enes100.updateLocation();
-        drive(255);
+        drive(-255);
     }
     stop();
 
     Enes100.println("YAAAY! Job Done!");
-    while (1) {}
 }

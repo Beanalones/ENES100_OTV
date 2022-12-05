@@ -2,12 +2,26 @@
 #include "Drive.h"
 #include "Navigation.h"
 #include "Enes100.h"
+#include <Vector.h>
 
 void moveToPoint(double xTarget, double yTarget, CenterPoint center) {
     double distance = 100;
+    double initialDistance = NAN;
     double lastAngle = NAN;
-    long int lastTurnTime = 0;
-    while (distance >= 0.02) {
+    long int lastTurnTime = -5000;
+
+    double storageX_array[10] = {0,0,0,0,0,0,0,0,0,0};
+    double storageY_array[10] = {0,0,0,0,0,0,0,0,0,0};
+    double storageTheta_array[10] = {0,0,0,0,0,0,0,0,0,0};
+    Vector<double> oldX;
+    Vector<double> oldY;
+    Vector<double> oldTheta;
+    oldX.setStorage(storageX_array);
+    oldY.setStorage(storageY_array);
+    oldTheta.setStorage(storageTheta_array);
+    long int lastOldUpdate = -5000;
+
+    while (1) {
         Enes100.updateLocation();
         
         double x, y;
@@ -21,35 +35,64 @@ void moveToPoint(double xTarget, double yTarget, CenterPoint center) {
             x = Enes100.location.x;
             y = Enes100.location.y;
         }
+        if(isnan(initialDistance))
+          initialDistance = sqrt(pow(xTarget - x, 2.) + pow(yTarget - y, 2.));
+
         double ang = angleToPoint(x, y, xTarget, yTarget);
         double dTheta = getDeltaAngle(Enes100.location.theta, ang);
 
-        if ((!isnan(lastAngle) && (lastAngle * dTheta > 0)) || (abs(dTheta) > 0.3) && (distance > 0.4) && (millis() - lastTurnTime > 2500) ) {
-            turn(turnSpeedForDeltaTheta(dTheta));
+        // Turn if we were just doing a turn, that we have not finished, or
+        // We have come off course
+        if ((!isnan(lastAngle) && (lastAngle * dTheta >= 0.)) || 
+            (abs(dTheta) > 0.3) && (distance > (initialDistance / 2.)) && (millis() - lastTurnTime > 2500) ) {
+
+            // Gun it in case we get stuck, this should never happen
+            if((oldTheta.size() > 9) && (abs(Enes100.location.theta - oldTheta[0]) < 0.02)){
+              turn(copysign(255, dTheta));
+            }
+            // We should always be turning as slow as possible
+            else{
+              turn(copysign(minTurnSpeed, dTheta));
+            }
             lastAngle = dTheta;
             lastTurnTime = millis();
+            oldX.clear();
+            oldY.clear();
         }
         else {
             distance = sqrt(pow(xTarget - x, 2.) + pow(yTarget - y, 2.));
+            // If the angle became large, we past the point. Stop
+            // Else keep driving
             if(dTheta > (M_PI / 2.))
               break;
-            else
-              drive(driveSpeedForDistance(distance));
-            
+            else{
+              // Give an extra boost if we get stuck on the obstacles
+              if((oldX.size() > 9) && (sqrt(pow(oldX[0] - x,2) + pow(oldY[0] - y,2)) < 0.02)){
+                drive(255);
+              }
+              
+              else{
+                drive(minDriveSpeed);
+              }
+              
+            }
             lastAngle = NAN;
+            oldTheta.clear();
         }
-    Enes100.print("X: ");
-    Enes100.print(Enes100.location.x);
-    Enes100.print("    Y: ");
-    Enes100.print(Enes100.location.y);
-    Enes100.print("    Theta: ");
-    Enes100.print(Enes100.location.theta);
-    Enes100.print("    Angle: ");
-    Enes100.print(ang);
-        Enes100.print("     Distance: ");
-        Enes100.print(distance);
-        Enes100.print("    dtheta: ");
-        Enes100.println(dTheta);
+
+        // update the old locations list
+        if(millis() - lastOldUpdate > 200){
+          if(oldX.size() > 9){
+            oldY.remove(0);
+            oldX.remove(0);
+            oldTheta.remove(0);
+          }
+          oldY.push_back(y);
+          oldX.push_back(x);
+          oldTheta.push_back(Enes100.location.theta);
+          lastOldUpdate = millis();
+        }
+
     }
     stop();
 }
@@ -63,7 +106,7 @@ void turnToAngle(double theta) {
         Enes100.print("   ");
         Enes100.println(dTheta);
         if ((isnan(lastAngle) || (lastAngle * dTheta >= 0))) {
-            turn(turnSpeedForDeltaTheta(dTheta));
+            turn(copysign(minTurnSpeed, dTheta));
             
             lastAngle = dTheta;
         }
@@ -113,20 +156,20 @@ double getDeltaAngle(double initialAngle, double finalAngle){
     delta += 2. * M_PI;
   return delta;
 }
-double turnSpeedForDeltaTheta(double dTheta){
-  //int value = (int) map_value(dTheta, -M_PI, M_PI, -127, 127 );
-  //int value = ((double)maxWheelSpeed - (double)minWheelSpeed) / sqrt(M_PI) * sqrt(abs(dTheta)) + (double)minWheelSpeed;
-  int value = map_value(abs(dTheta), 0., M_PI, minWheelSpeed, maxWheelSpeed);
-  value=200;
-  value = copysign(value, dTheta);
+// double turnSpeedForDeltaTheta(double dTheta){
+//   //int value = (int) map_value(dTheta, -M_PI, M_PI, -127, 127 );
+//   //int value = ((double)maxWheelSpeed - (double)minWheelSpeed) / sqrt(M_PI) * sqrt(abs(dTheta)) + (double)minWheelSpeed;
+//   int value = map_value(abs(dTheta), 0., M_PI, minWheelSpeed, maxWheelSpeed);
+//   value=200;
+//   value = copysign(value, dTheta);
 
-  return value;
-}
+//   return value;
+// }
 
-double driveSpeedForDistance(double distance){
-  //int value = ((double)maxWheelSpeed - (double)minWheelSpeed) / sqrt(2.) * sqrt(abs(distance)) + (double)minWheelSpeed;
-  int value = map_value(abs(distance), 0., 2., minWheelSpeed, maxWheelSpeed);
-  value=100;
-  value = copysign(value, distance);
-  return value;
-}
+// double driveSpeedForDistance(double distance){
+//   //int value = ((double)maxWheelSpeed - (double)minWheelSpeed) / sqrt(2.) * sqrt(abs(distance)) + (double)minWheelSpeed;
+//   int value = map_value(abs(distance), 0., 2., minWheelSpeed, maxWheelSpeed);
+//   value=100;
+//   value = copysign(value, distance);
+//   return value;
+// }
