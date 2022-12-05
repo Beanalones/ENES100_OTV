@@ -118,15 +118,15 @@ void runFullMission() {
                 // There should never be 2 solid obstacles
                 Enes100.println("Error: Invalid obstacle setup");
             }
-            moveToPoint(1.9, 1.5, Center);
+            moveToPoint(2., 1.5, Center);
         }
         else {
-            moveToPoint(1.9, 1.5, Center);
+            moveToPoint(2., 1.5, Center);
             rightMidObs = facingObstacle();
         }
     }
     else {
-        moveToPoint(1.9, 1., Center);
+        moveToPoint(2., 0.5, Center);
         rightBottomObs = facingObstacle();
     }
 

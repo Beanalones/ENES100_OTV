@@ -10,13 +10,13 @@ enum CenterPoint {
 #define minDriveSpeed 100
 
 // The offset from the aruco to the center of the arm
-#define forkliftXOff 0.075
+#define forkliftXOff 0.09
 #define forkliftYOff 0.28
 
 // The offset from the aruco to the center of the robot
 // The robot center is the point the wheels rotate around
 #define centerXOff 0.075
-#define centerYOff 0.1
+#define centerYOff 0.11
 
 void moveToPoint(double xTarget, double yTarget, CenterPoint center);
 void turnToAngle(double theta);

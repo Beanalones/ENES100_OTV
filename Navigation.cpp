@@ -40,20 +40,20 @@ void moveToPoint(double xTarget, double yTarget, CenterPoint center) {
 
         double ang = angleToPoint(x, y, xTarget, yTarget);
         double dTheta = getDeltaAngle(Enes100.location.theta, ang);
-
+        Enes100.println(dTheta);
         // Turn if we were just doing a turn, that we have not finished, or
         // We have come off course
         if ((!isnan(lastAngle) && (lastAngle * dTheta >= 0.)) || 
-            (abs(dTheta) > 0.3) && (distance > (initialDistance / 2.)) && (millis() - lastTurnTime > 2500) ) {
-
+            ((abs(dTheta) > 0.3) && (distance > 0.3)) ) {
+// && (millis() - lastTurnTime > 2500)
             // Gun it in case we get stuck, this should never happen
-            if((oldTheta.size() > 9) && (abs(Enes100.location.theta - oldTheta[0]) < 0.02)){
-              turn(copysign(255, dTheta));
-            }
-            // We should always be turning as slow as possible
-            else{
+            // if((oldTheta.size() > 9) && (abs(Enes100.location.theta - oldTheta[0]) < 0.02)){
+            //   turn(copysign(255, dTheta));
+            // }
+            // // We should always be turning as slow as possible
+            // else{
               turn(copysign(minTurnSpeed, dTheta));
-            }
+            // }
             lastAngle = dTheta;
             lastTurnTime = millis();
             oldX.clear();
@@ -68,7 +68,7 @@ void moveToPoint(double xTarget, double yTarget, CenterPoint center) {
             else{
               // Give an extra boost if we get stuck on the obstacles
               if((oldX.size() > 9) && (sqrt(pow(oldX[0] - x,2) + pow(oldY[0] - y,2)) < 0.02)){
-                drive(255);
+                drive(225);
               }
               
               else{
