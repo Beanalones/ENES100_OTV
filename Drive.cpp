@@ -34,13 +34,23 @@ void turn(int vel){
   }
 }
 
-void stop(void)                    //Stop
-{
-  digitalWrite(In1Left,LOW);
-  digitalWrite(In2Left,LOW);
+void brake(){
+  analogWrite(EnLeft, 255);
+  digitalWrite(In1Left,HIGH);
+  digitalWrite(In2Left,HIGH);
 
-  digitalWrite(In1Right,LOW);
-  digitalWrite(In2Right,LOW);
+  analogWrite(EnRight, 255);
+  digitalWrite(In1Right,HIGH);
+  digitalWrite(In2Right,HIGH);
+}
+void coast(){
+  analogWrite(EnLeft, 0);
+  digitalWrite(In1Left,HIGH);
+  digitalWrite(In2Left,HIGH);
+
+  analogWrite(EnRight, 0);
+  digitalWrite(In1Right,HIGH);
+  digitalWrite(In2Right,HIGH);
 }
 
 void leftBackward(char speed){

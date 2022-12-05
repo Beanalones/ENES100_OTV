@@ -39,7 +39,7 @@ void testGetData() {
     while (!readDataConnection(dutyCycle)) {
         drive(-100);
         delay(100);
-        stop();
+        brake();
     }
 
     // Step 3: Print results
@@ -61,7 +61,7 @@ void testGetData() {
     forkliftStop();
     drive(-100);
     delay(500);
-    stop();
+    brake();
     // Done with data section!
 }
 
@@ -70,7 +70,7 @@ void fullSystemTest() {
     delay(750);
     drive(255);
     delay(2000);
-    stop();
+    brake();
 
     Enes100.println("Testing turn...");
     delay(750);
@@ -78,7 +78,7 @@ void fullSystemTest() {
     delay(1000);
     turn(-255);
     delay(1000);
-    stop();
+    brake();
 
     // Enes100.println("Testing forklift movement...");
     // delay(750);
@@ -173,5 +173,5 @@ void testClimbLog(){
       Enes100.updateLocation();
       drive(255);
     }
-    stop();
+    brake();
 }

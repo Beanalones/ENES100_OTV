@@ -57,7 +57,7 @@ void runFullMission() {
 
     drive(-255);
     delay(100);
-    stop();
+    brake();
     // Step 2: Move back until a connection is made
     int dutyCycle = 0;
     for(int i=0;i<7;i++){
@@ -93,7 +93,7 @@ void runFullMission() {
     forkliftStop();
     drive(-150);
     delay(1000);
-    stop();
+    brake();
     // Done with data section!
 
     // Extration!
@@ -167,7 +167,7 @@ void runFullMission() {
         Enes100.updateLocation();
         drive(-255);
     }
-    stop();
+    brake();
 
     Enes100.println("YAAAY! Job Done!");
 }

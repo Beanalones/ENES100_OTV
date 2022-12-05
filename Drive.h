@@ -9,7 +9,8 @@ void drive(int vel);
 // -127, 127  Negative is CW
 void turn(int vel);
 
-void stop();
+void brake();
+void coast();
 
 void leftForward(char speed);
 void leftBackward(char speed);

@@ -94,7 +94,7 @@ void moveToPoint(double xTarget, double yTarget, CenterPoint center) {
         }
 
     }
-    stop();
+    brake();
 }
 
 void turnToAngle(double theta) {
@@ -113,7 +113,7 @@ void turnToAngle(double theta) {
         else
             break;
     }
-    stop();
+    brake();
     
 }
 
