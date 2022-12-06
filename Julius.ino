@@ -10,17 +10,19 @@
 void setup() {
     Serial.begin(9600);
     Serial.println("Initialized");
-    Enes100.begin("Julius", DATA, arucoID, wifiTXPin, wifiRXPin);
+    delay(2000);
+    //Enes100.begin("Julius", DATA, arucoID, wifiTXPin, wifiRXPin);
+    delay(2000);
     setupForklift();
     setupUltrasonic();
     setupDrive();
-
+    
     //fullSystemTest();
     //moveToPoint(Enes100.missionSite.x, Enes100.missionSite.y, Forklift);
     //moveToPoint(2.5, 1.5, Forklift);
     //turnToAngle(0);
-    Enes100.updateLocation();
-    delay(2000);
+    while (!Enes100.updateLocation());
+
     Enes100.print("Mission site is at    X: ");
     Enes100.print(Enes100.missionSite.x);
     Enes100.print("    Y: ");
@@ -117,13 +119,13 @@ void runFullMission() {
             turnToAngle(0.);
             leftTopObs = facingObstacle();
             if (leftTopObs) {
-                // There should never be 2 solid obstacles
+                // There should never be 3 solid obstacles
                 Enes100.println("Error: Invalid obstacle setup");
             }
             moveToPoint(2., 1.5, Center);
         }
         else {
-            moveToPoint(2., 1.5, Center);
+            moveToPoint(2., 1., Center);
             rightMidObs = facingObstacle();
         }
     }
@@ -136,7 +138,7 @@ void runFullMission() {
         // If we hit an obstacle in the second column
 
         if (leftMidObs == 1) {
-            // There should never be 2 solid obstacles
+            // There should never be 3 solid obstacles
             Enes100.println("Error: Invalid obstacle setup");
         }
         else if (leftBottomObs == 1) {
@@ -150,7 +152,7 @@ void runFullMission() {
             if (facingObstacle) {
                 moveToPoint(1.9, 1.5, Center);
                 if (facingObstacle()) {
-                    // There should never be 2 solid obstacles
+                    // There should never be 3 solid obstacles
                     Enes100.println("Error: Invalid obstacle setup");
                 }
             }
@@ -158,7 +160,13 @@ void runFullMission() {
     }
 
     // We are clear of obstacles in the second column now, move forward
-    moveToPoint(2.8, Enes100.location.y, Center);
+    Enes100.updateLocation();
+    if(Enes100.location.y < 0.75)
+      moveToPoint(2.8, 0.5, Center);
+    else if(Enes100.location.y < 1.25)
+      moveToPoint(2.8, 1., Center);
+    else
+      moveToPoint(2.8, 1.5, Center);
 
     // Move in front of the log
     moveToPoint(2.8, 0.5, Center);

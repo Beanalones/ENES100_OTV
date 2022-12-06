@@ -4,6 +4,7 @@
 #include "Arduino.h"
 
 #define dcTol 3
+#define hallSensorConstant 100
 
 void setupForklift();
 

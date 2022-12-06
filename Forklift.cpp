@@ -1,8 +1,13 @@
 #include "Forklift.h"
 
+bool mag = false;
+void onInterrupt(){
+  mag = true;
+}
 void setupForklift(){
   pinMode(data, INPUT);
   pinMode(hallSensor, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(hallSensor), onInterrupt, LOW);
 
   pinMode(EnA, OUTPUT);
   pinMode(In1, OUTPUT);
@@ -91,5 +96,5 @@ bool readDataConnection(int &dutyCycle){
 }
 
 bool isMagnetic(){
-  return  analogRead(hallSensor) < 100;
+  return  mag;
 }

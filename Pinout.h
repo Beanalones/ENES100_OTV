@@ -12,10 +12,10 @@
 
 #define EnRight 3     //M2 Speed Control, right
 #define In1Right 4    //M1 Direction Control
-#define In2Right 2    //M1 Direction Control
+#define In2Right 13    //M1 Direction Control
 
 #define data A0
-#define hallSensor A1
+#define hallSensor 2
 
 // Forlift Motor Connections
 //Change this if you wish to use another diagram

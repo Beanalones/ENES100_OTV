@@ -119,7 +119,7 @@ void testUltra(){
 
 void testHallEffect(){
   int val = analogRead(hallSensor);
-  if(val < 70){
+  if(val < hallSensorConstant){
     Enes100.println("Magnetic");
   }
   else{
