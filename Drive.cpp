@@ -9,6 +9,7 @@ void setupDrive(){
   pinMode(EnRight, OUTPUT);
   pinMode(In1Right, OUTPUT);
   pinMode(In2Right, OUTPUT);
+  brake();
 }
 // -127, 127  Negative is backward
 void drive(int vel){

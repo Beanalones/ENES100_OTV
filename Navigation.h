@@ -21,8 +21,6 @@ enum CenterPoint {
 void moveToPoint(double xTarget, double yTarget, CenterPoint center);
 void turnToAngle(double theta);
 
-double map_value(double inVal, double inMin, double inMax, double outMin, double outMax);
-
 void getForkliftPos(double x, double y, double theta, double &xOut, double &yOut);
 void getCenterPos(double x, double y, double theta, double &xOut, double &yOut);
 
@@ -31,16 +29,6 @@ double angleToPoint(double xi, double yi, double xf, double yf);
 
 // Returns the smallest difference between two angles, -pi to pi
 double getDeltaAngle(double initialAngle, double finalAngle);
-
-// // Returns the speed the wheels should turn for a specific angle
-// // INPUT: -pi, pi
-// // OUTPUT: -127, 127
-// double turnSpeedForDeltaTheta(double dTheta);
-
-// // Returns the speed the wheels should turn for a specific distance
-// // INPUT: -intMax to intMax
-// // OUTPUT: -127, 127
-// double driveSpeedForDistance(double distance);
 
 void testPosOffsets();
 

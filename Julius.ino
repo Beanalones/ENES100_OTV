@@ -19,7 +19,9 @@ void setup() {
     //moveToPoint(Enes100.missionSite.x, Enes100.missionSite.y, Forklift);
     //moveToPoint(2.5, 1.5, Forklift);
     //turnToAngle(0);
-    Enes100.print("X: ");
+    Enes100.updateLocation();
+    delay(2000);
+    Enes100.print("Mission site is at    X: ");
     Enes100.print(Enes100.missionSite.x);
     Enes100.print("    Y: ");
     Enes100.println(Enes100.missionSite.y);

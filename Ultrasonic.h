@@ -4,7 +4,7 @@
 
 // If a distance greater than this is read, the OTV will
 // assume no obstacle is present
-#define distanceConstant 80
+#define distanceConstant 40.
 
 void setupUltrasonic();
 double readUltra();
